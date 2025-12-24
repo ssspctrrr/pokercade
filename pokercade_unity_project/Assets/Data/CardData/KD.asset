@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92787347ce325f540bfbc2e9f4cbccc5, type: 3}
+  m_Name: KD
+  m_EditorClassIdentifier: Assembly-CSharp::card_data
+  id: KD
+  suit: 1
+  rank: 13
+  value: 10
+  sprite: {fileID: 5800886802947584505, guid: 155ebc15dd8df6949993b5adcf3a5286, type: 3}

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92787347ce325f540bfbc2e9f4cbccc5, type: 3}
+  m_Name: 5D
+  m_EditorClassIdentifier: Assembly-CSharp::card_data
+  id: 5D
+  suit: 1
+  rank: 5
+  value: 5
+  sprite: {fileID: -4964529040808451010, guid: e371ce2ebf457144c8623b2603580783, type: 3}
