@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7767198806528769665}
   - component: {fileID: 7455246784185839663}
   m_Layer: 0
-  m_Name: card_back
+  m_Name: CardBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 11
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8246103488371625927, guid: 12866e74633fd724dbf51bb96ca87863, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -197,3 +197,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardInstance
   data: {fileID: 0}
+  cardBackObj: {fileID: 653603896387535523}
