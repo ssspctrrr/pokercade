@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -27,8 +28,14 @@ public class ScoreManager : MonoBehaviour
         }
 
         List<GameObject> scored_cards = new List<GameObject>();
-        scored_cards = check_pair(played_cards);;
-        if (scored_cards != null && scored_cards.Count > 0)
+        scored_cards = check_two_pair(played_cards);
+        if (scored_cards != null && scored_cards.Count == 4)
+        {
+            poker_hand = "Two Pair";
+            score_value = 20;
+            score_mult = 2;
+        }
+        else if (scored_cards != null && scored_cards.Count == 2)
         {
             poker_hand = "Pair";
             score_value = 10;
@@ -104,4 +111,34 @@ public class ScoreManager : MonoBehaviour
         return scored_cards;
     }
 
+    public static List<GameObject> check_two_pair(List<GameObject> played_cards) 
+    { 
+        List<GameObject> first_pair_check = check_pair(played_cards);
+        if (first_pair_check != null && first_pair_check.Count > 0)
+        {
+            int removed_cards = 0;
+            Rank first_pair_rank = first_pair_check[0].GetComponent<CardData>().Card.rank;
+            for (int i = 0; i < played_cards.Count; i++)
+            {
+                if (played_cards[i - removed_cards].GetComponent<CardData>().Card.rank == first_pair_rank)
+                {
+                    played_cards.Remove(played_cards[i - removed_cards]);
+                    removed_cards++;
+
+                    if (removed_cards == 2)
+                    {
+                        break;
+                    }
+                }
+            }
+            List<GameObject> second_pair_check = check_pair(played_cards);
+            {
+                if (second_pair_check != null && second_pair_check.Count > 0)
+                {
+                    return first_pair_check.Concat(second_pair_check).ToList();
+                }
+            }
+        }
+        return first_pair_check;
+    }
 }
