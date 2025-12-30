@@ -10,6 +10,7 @@ public class CardData : MonoBehaviour
     {
         CardImage.sprite = Card.sprite;
     }
+
     public Suit get_suit()
     {
         return Card.suit;
