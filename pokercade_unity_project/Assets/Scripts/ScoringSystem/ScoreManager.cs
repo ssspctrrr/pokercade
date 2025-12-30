@@ -101,10 +101,12 @@ public class ScoreManager : MonoBehaviour
         {
             if (three_of_a_kind != default)
             {
-                // adjust base_score for full house
-                return default;
+                base_score.poker_hand = "Full House";
+                base_score.score_value = 40;
+                base_score.score_mult = 4;
+                base_score.scored_cards = played_cards; // since all played cards are scored
+                return base_score;
             }
-            // adjust base_score for pair
             base_score.poker_hand = "Pair";
             base_score.score_value = 10;
             base_score.score_mult = 2;
