@@ -113,8 +113,11 @@ public class ScoreManager : MonoBehaviour
         }
         else if (pairs != default && pairs.Count == 4) 
         {
-            // adjust base_score for two pair
-            return default;
+            base_score.poker_hand = "Two Pair";
+            base_score.score_value = 20;
+            base_score.score_mult = 2;
+            base_score.scored_cards = pairs;
+            return base_score;
         }
         else if (three_of_a_kind != default)
         {
