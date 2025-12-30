@@ -121,8 +121,11 @@ public class ScoreManager : MonoBehaviour
         }
         else if (three_of_a_kind != default)
         {
-            // adjust base_score for three of a kind
-            return default;
+            base_score.poker_hand = "Three of a Kind";
+            base_score.score_value = 30;
+            base_score.score_mult = 3;
+            base_score.scored_cards = three_of_a_kind;
+            return base_score;
         }
         else
         {
@@ -189,7 +192,36 @@ public class ScoreManager : MonoBehaviour
     public static List<GameObject> check_three_of_a_kind(List<GameObject> played_cards)
     {
         List<GameObject> scored_cards = new List<GameObject>();
-        return default;
+        List<Rank> rank_list = new List<Rank>();
+        Rank rank_of_three_of_a_kind = new Rank();
+
+        foreach (GameObject card in played_cards)
+        {
+            CardData card_data = card.GetComponent<CardData>();
+            rank_list.Add(card_data.get_rank());
+        }
+
+        foreach (Rank current_rank in rank_list)
+        {
+            if (rank_list.Count(each_card_rank => each_card_rank == current_rank) == 3)
+            {
+                rank_of_three_of_a_kind = current_rank;
+                break;
+            }
+        }
+        if (rank_of_three_of_a_kind == default)
+        {
+            return default;
+        }
+
+        foreach (GameObject card in played_cards)
+        {
+            if (card.GetComponent<CardData>().get_rank() == rank_of_three_of_a_kind)
+            {
+                scored_cards.Add(card);
+            }
+        }
+        return scored_cards;
     }
 
     public static BaseScoreData get_high_card(List<GameObject> played_cards)
