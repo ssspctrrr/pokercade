@@ -6,16 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.PackageManager;
 
 public class ScoreManager : MonoBehaviour
 {
     public GameObject played_cards_slot;
     public Text poker_hand_text;
-    string poker_hand;
     public Text score_value_text;
-    int score_value;
     public Text score_mult_text;
-    int score_mult;
     public Text score_text;
     int score;
 
@@ -27,118 +25,138 @@ public class ScoreManager : MonoBehaviour
             played_cards.Add(card_transform.gameObject);
         }
 
-        List<GameObject> scored_cards = new List<GameObject>();
-        scored_cards = check_two_pair(played_cards);
-        if (scored_cards != null && scored_cards.Count == 4)
-        {
-            poker_hand = "Two Pair";
-            score_value = 20;
-            score_mult = 2;
-        }
-        else if (scored_cards != null && scored_cards.Count == 2)
-        {
-            poker_hand = "Pair";
-            score_value = 10;
-            score_mult = 2;
-        }
-        else
-        {
-            scored_cards = check_high_card(played_cards);
-            poker_hand = "High Card";
-            score_value = 5;
-            score_mult = 1;
-        }
+        BaseScoreData base_score = null;
+        base_score = check_straight_and_or_flush(played_cards);
+        if (base_score == null) { base_score = check_four_of_a_kind(played_cards); }
+        if (base_score == null) { base_score = check_full_house_3_of_a_kind_pairs(played_cards); }
+        if (base_score == null) { base_score = get_high_card(played_cards); }
 
-        foreach (GameObject scored_card in scored_cards)
+        foreach (GameObject scored_card in base_score.scored_cards)
         {
-            score_value = score_value + scored_card.GetComponent<CardData>().Card.value;
+            base_score.score_value = base_score.score_value + scored_card.GetComponent<CardData>().Card.value;
         }
-        score = score_value * score_mult;
+        score = base_score.score_value * base_score.score_mult;
 
-        poker_hand_text.text = poker_hand;
-        score_value_text.text = score_value.ToString();
-        score_mult_text.text = score_mult.ToString();
+        poker_hand_text.text = base_score.poker_hand;
+        score_value_text.text = base_score.score_value.ToString();
+        score_mult_text.text = base_score.score_mult.ToString();
         score_text.text = score.ToString();
     }
 
-    public static List<GameObject> check_high_card(List<GameObject> played_cards)
+    public static BaseScoreData check_straight_and_or_flush(List<GameObject> played_cards)
     {
-        List<GameObject> sorted_played_cards = played_cards.OrderByDescending(card => (int)card.GetComponent<CardData>().Card.rank).ToList();
-        List<GameObject> scored_cards = new List<GameObject>();
-        if (sorted_played_cards[^1].GetComponent<CardData>().Card.rank == Rank.Ace)
+        BaseScoreData base_score = new BaseScoreData();
+        List<GameObject> straight = check_straight(played_cards);
+        List<GameObject> flush = check_flush(played_cards);
+
+        if (straight != null && flush != null) 
         {
-            scored_cards.Add(sorted_played_cards[^1]);
+            // Straight flush is played
+            // Adjust value of base_score for straight flush
+            return base_score;
         }
-        else
+        else if (straight != null)
         {
-            scored_cards.Add(sorted_played_cards[0]);
+            // Straight is played
+            // Adjust value of base_score for straight
+            return base_score;
+        }
+        else if (flush != null)
+        {
+            // Flush is played
+            // Adjust value of base_score for flush
+            return base_score;
+        }
+        // else both straight and flush is null, return null
+        return null;
+    }
+
+    public static List<GameObject> check_straight(List<GameObject> played_cards)
+    {
+        List<GameObject> scored_cards = new List<GameObject>();
+        return scored_cards;
+    }
+
+    public static List<GameObject> check_flush(List<GameObject> played_cards)
+    {
+        List<GameObject> scored_cards = new List<GameObject>();
+        return scored_cards;
+    }
+
+    public static BaseScoreData check_four_of_a_kind(List<GameObject> played_cards)
+    {
+        // check if four of a kind is played
+        BaseScoreData base_score = new BaseScoreData();
+        return base_score;
+    }
+
+    public static BaseScoreData check_full_house_3_of_a_kind_pairs(List<GameObject> played_cards)
+    {
+        BaseScoreData base_score = new BaseScoreData();
+        List<GameObject> pairs = check_for_pairs(played_cards);
+        if (pairs == null)
+        {
+            return null;
+        }
+        else if (pairs.Count == 4)
+        {
+            // adjust base_score for two pair
+            return base_score;
+        }
+        else // if pairs.Count == 2
+        {
+            List<GameObject> three_of_a_kind = check_three_of_a_kind(played_cards);
+            if (three_of_a_kind != null && pairs.Count == 2)
+            {
+                // adjust base_score for full house
+                return base_score;
+            }
+            else if (three_of_a_kind != null)
+            {
+                // adjust base_score for three of a kind
+                return base_score;
+            }
+            else
+            {
+                // adjust base_score for pair
+                return base_score;
+            }
+        }
+    }
+
+    public static List<GameObject> check_for_pairs(List<GameObject> played_cards) 
+    {
+        List<GameObject> scored_cards = new List<GameObject>();
+        List<GameObject> first_pair_check = check_pair(played_cards);
+        if (first_pair_check != null && first_pair_check.Count > 0) // checks if there is a pair
+        {
+            List<GameObject> second_pair_check = check_pair(played_cards);
+            if (second_pair_check != null && second_pair_check.Count > 0) // checks if there is a second pair
+            {
+                scored_cards = first_pair_check.Concat(second_pair_check).ToList();
+            }
         }
         return scored_cards;
     }
 
     public static List<GameObject> check_pair(List<GameObject> played_cards)
     {
-        List<Rank> rank_list = new List<Rank>();
         List<GameObject> scored_cards = new List<GameObject>();
-        Rank rank_of_pair = new Rank();
-
-        foreach (GameObject card in played_cards)
-        {
-            CardData card_data = card.GetComponent<CardData>();
-            rank_list.Add(card_data.Card.rank);
-        }
-
-        foreach (Rank current_rank in rank_list) 
-        {
-            if (rank_list.Count(each_card_rank => each_card_rank == current_rank) == 2 )
-            {
-                rank_of_pair = current_rank;
-                break;
-            }
-            else
-            {
-                return null; 
-            }
-        }
-
-        foreach (GameObject card in played_cards)
-        {
-            if (card.GetComponent<CardData>().Card.rank == rank_of_pair)
-            {
-                scored_cards.Add(card);
-            }
-        }
         return scored_cards;
     }
 
-    public static List<GameObject> check_two_pair(List<GameObject> played_cards) 
-    { 
-        List<GameObject> first_pair_check = check_pair(played_cards);
-        if (first_pair_check != null && first_pair_check.Count > 0)
-        {
-            int removed_cards = 0;
-            Rank first_pair_rank = first_pair_check[0].GetComponent<CardData>().Card.rank;
-            for (int i = 0; i < played_cards.Count; i++)
-            {
-                if (played_cards[i - removed_cards].GetComponent<CardData>().Card.rank == first_pair_rank)
-                {
-                    played_cards.Remove(played_cards[i - removed_cards]);
-                    removed_cards++;
-
-                    if (removed_cards == 2)
-                    {
-                        break;
-                    }
-                }
-            }
-            List<GameObject> second_pair_check = check_pair(played_cards);
-            {
-                if (second_pair_check != null && second_pair_check.Count > 0)
-                {
-                    return first_pair_check.Concat(second_pair_check).ToList();
-                }
-            }
-        }
-        return first_pair_check;
+    public static List<GameObject> check_three_of_a_kind(List<GameObject> played_cards)
+    {
+        List<GameObject> scored_cards = new List<GameObject>();
+        return scored_cards;
     }
+
+    public static BaseScoreData get_high_card(List<GameObject> played_cards)
+    {
+        BaseScoreData base_score = new BaseScoreData();
+        // adjust base_score for high card
+        return base_score;
+
+    }
+
 }

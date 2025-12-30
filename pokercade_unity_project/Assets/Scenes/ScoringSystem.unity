@@ -1487,7 +1487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f08f6734a5640c448bfa493cd5af38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  Card: {fileID: 11400000, guid: 32822bf7950b3ed4ba6921d82876a21e, type: 2}
+  Card: {fileID: 11400000, guid: 2a674ce9c85180645889229f03d58506, type: 2}
   CardImage: {fileID: 1418013231}
 --- !u!1 &1481169172
 GameObject:
@@ -1735,7 +1735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f08f6734a5640c448bfa493cd5af38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  Card: {fileID: 11400000, guid: e353401ca02199746be532e2cff2383e, type: 2}
+  Card: {fileID: 11400000, guid: 9803b45d057235742902f716cbe58eef, type: 2}
   CardImage: {fileID: 1802876899}
 --- !u!1 &1909092825
 GameObject:
