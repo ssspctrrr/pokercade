@@ -1629,7 +1629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f08f6734a5640c448bfa493cd5af38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  Card: {fileID: 11400000, guid: c392ba8bed4a85549a3a6a67e11f4968, type: 2}
+  Card: {fileID: 11400000, guid: 7a0afb2a0b2f5ca42a2d26f0eba70a05, type: 2}
   CardImage: {fileID: 1515763511}
 --- !u!1 &1802876897
 GameObject:

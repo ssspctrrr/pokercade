@@ -105,7 +105,11 @@ public class ScoreManager : MonoBehaviour
                 return default;
             }
             // adjust base_score for pair
-            return default;
+            base_score.poker_hand = "Pair";
+            base_score.score_value = 10;
+            base_score.score_mult = 2;
+            base_score.scored_cards = pairs;
+            return base_score;
         }
         else if (pairs != default && pairs.Count == 4) 
         {
@@ -125,23 +129,58 @@ public class ScoreManager : MonoBehaviour
 
     public static List<GameObject> check_for_pairs(List<GameObject> played_cards) 
     {
+        played_cards = played_cards.ToList();
         List<GameObject> scored_cards = new List<GameObject>();
         List<GameObject> first_pair_check = check_pair(played_cards);
         if (first_pair_check != default && first_pair_check.Count > 0) // checks if there is a pair
         {
+            foreach (GameObject card in first_pair_check)
+            {
+                played_cards.Remove(card);
+            }
             List<GameObject> second_pair_check = check_pair(played_cards);
             if (second_pair_check != default && second_pair_check.Count > 0) // checks if there is a second pair
             {
                 scored_cards = first_pair_check.Concat(second_pair_check).ToList();
+                return scored_cards;
             }
         }
-        return default;
+        return first_pair_check;
     }
 
     public static List<GameObject> check_pair(List<GameObject> played_cards)
     {
         List<GameObject> scored_cards = new List<GameObject>();
-        return default;
+        List<Rank> rank_list = new List<Rank>();
+        Rank rank_of_pair = new Rank();
+
+        foreach (GameObject card in played_cards)
+        {
+            CardData card_data = card.GetComponent<CardData>();
+            rank_list.Add(card_data.get_rank());
+        }
+
+        foreach (Rank current_rank in rank_list)
+        {
+            if (rank_list.Count(each_card_rank => each_card_rank == current_rank) == 2)
+            {
+                rank_of_pair = current_rank;
+                break;
+            }
+        }
+        if (rank_of_pair == default)
+        {
+            return default;
+        }
+
+        foreach (GameObject card in played_cards)
+        {
+            if (card.GetComponent<CardData>().get_rank() == rank_of_pair)
+            {
+                scored_cards.Add(card);
+            }
+        }
+        return scored_cards;
     }
 
     public static List<GameObject> check_three_of_a_kind(List<GameObject> played_cards)
@@ -152,10 +191,23 @@ public class ScoreManager : MonoBehaviour
 
     public static BaseScoreData get_high_card(List<GameObject> played_cards)
     {
-        BaseScoreData base_score = new BaseScoreData();
+        List<GameObject> sorted_played_cards = played_cards.OrderByDescending(card => (int)card.GetComponent<CardData>().Card.rank).ToList();
+
         // adjust base_score for high card
-        return default;
+        BaseScoreData base_score = new BaseScoreData();
+        base_score.poker_hand = "High Card";
+        base_score.score_value = 5;
+        base_score.score_mult = 1;
+        base_score.scored_cards = new List<GameObject>();
+        if (sorted_played_cards[^1].GetComponent<CardData>().get_rank() == Rank.Ace)
+        {
+            base_score.scored_cards.Add(sorted_played_cards[^1]);
+        }
+        else
+        {
+            base_score.scored_cards.Add(sorted_played_cards[0]);
+        }
+        return base_score;
 
     }
-
 }
