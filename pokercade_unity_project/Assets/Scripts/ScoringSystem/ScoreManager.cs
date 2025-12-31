@@ -1,14 +1,15 @@
 using JetBrains.Annotations;
 using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Jobs;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.PackageManager;
-using Unity.Jobs;
+using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
+using static UnityEditor.ShaderData;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -59,8 +60,10 @@ public class ScoreManager : MonoBehaviour
         }
         else if (straight != default)
         {
-            // Straight is played
-            // Adjust value of base_score for straight
+            base_score.poker_hand = "Straight";
+            base_score.score_value = 30;
+            base_score.score_mult = 4;
+            base_score.scored_cards = straight;
             return base_score;
         }
         else if (flush != default)
@@ -75,8 +78,30 @@ public class ScoreManager : MonoBehaviour
 
     public static List<GameObject> check_straight(List<GameObject> played_cards)
     {
-        List<GameObject> scored_cards = new List<GameObject>();
-        return default;
+        List<GameObject> sorted_played_cards = played_cards.OrderBy(card => (int)card.GetComponent<CardData>().Card.rank).ToList();
+        List<int> int_rank_list = new List<int>();
+        bool is_normal_straight = true;
+        for (int i = 0; i < sorted_played_cards.Count; i++)
+        {
+            int_rank_list.Add((int)sorted_played_cards[i].GetComponent<CardData>().get_rank());
+            if (i == 0)
+            {
+                continue;
+            }
+            else if (sorted_played_cards[i].GetComponent<CardData>().get_rank() - sorted_played_cards[i-1].GetComponent<CardData>().get_rank() != 1)
+            {
+                is_normal_straight = false;
+            }
+        }
+        List<int> sorted_int_rank_list = int_rank_list.OrderBy(rank => rank).ToList();
+        if (is_normal_straight || sorted_int_rank_list.SequenceEqual(new List<int> {1,10,11,12,13}))
+        {
+            return played_cards;
+        }
+        else
+        {
+            return default;
+        }
     }
 
     public static List<GameObject> check_flush(List<GameObject> played_cards)
