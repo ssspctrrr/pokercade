@@ -126,9 +126,41 @@ public class ScoreManager : MonoBehaviour
 
     public static BaseScoreData check_four_of_a_kind(List<GameObject> played_cards)
     {
-        // check if four of a kind is played
         BaseScoreData base_score = new BaseScoreData();
-        return default;
+        base_score.scored_cards = new List<GameObject>();
+        List<Rank> rank_list = new List<Rank>();
+        Rank rank_of_four_of_a_kind = new Rank();
+
+        foreach (GameObject card in played_cards)
+        {
+            CardData card_data = card.GetComponent<CardData>();
+            rank_list.Add(card_data.get_rank());
+        }
+
+        foreach (Rank current_rank in rank_list)
+        {
+            if (rank_list.Count(each_card_rank => each_card_rank == current_rank) == 4)
+            {
+                rank_of_four_of_a_kind = current_rank;
+                break;
+            }
+        }
+        if (rank_of_four_of_a_kind == default)
+        {
+            return default;
+        }
+
+        foreach (GameObject card in played_cards)
+        {
+            if (card.GetComponent<CardData>().get_rank() == rank_of_four_of_a_kind)
+            {
+                base_score.scored_cards.Add(card);
+            }
+        }
+        base_score.poker_hand = "Four of a Kind";
+        base_score.score_value = 60;
+        base_score.score_mult = 7;
+        return base_score;
     }
 
     public static BaseScoreData check_full_house_3_of_a_kind_pairs(List<GameObject> played_cards)
