@@ -54,8 +54,10 @@ public class ScoreManager : MonoBehaviour
 
         if (straight != default && flush != default) 
         {
-            // Straight flush is played
-            // Adjust value of base_score for straight flush
+            base_score.poker_hand = "Straight Flush";
+            base_score.score_value = 100;
+            base_score.score_mult = 8;
+            base_score.scored_cards = played_cards;
             return base_score;
         }
         else if (straight != default)

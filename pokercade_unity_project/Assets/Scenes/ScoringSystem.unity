@@ -1487,7 +1487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f08f6734a5640c448bfa493cd5af38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  Card: {fileID: 11400000, guid: 2a674ce9c85180645889229f03d58506, type: 2}
+  Card: {fileID: 11400000, guid: 9803b45d057235742902f716cbe58eef, type: 2}
   CardImage: {fileID: 1418013231}
 --- !u!1 &1481169172
 GameObject:
@@ -1629,7 +1629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f08f6734a5640c448bfa493cd5af38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  Card: {fileID: 11400000, guid: 3b3577bfd677a5b459d7dffd6df89afc, type: 2}
+  Card: {fileID: 11400000, guid: b4a5d443006e259418704830e9ed7bfd, type: 2}
   CardImage: {fileID: 1515763511}
 --- !u!1 &1802876897
 GameObject:
@@ -1735,7 +1735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f08f6734a5640c448bfa493cd5af38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  Card: {fileID: 11400000, guid: 9803b45d057235742902f716cbe58eef, type: 2}
+  Card: {fileID: 11400000, guid: cce7468929949d54f9c3b77c1400d9fb, type: 2}
   CardImage: {fileID: 1802876899}
 --- !u!1 &1909092825
 GameObject:
@@ -1841,7 +1841,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f08f6734a5640c448bfa493cd5af38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  Card: {fileID: 11400000, guid: f1ae045470f16114a8cb985b515e4b0f, type: 2}
+  Card: {fileID: 11400000, guid: b861391c77e909e47a918b527dcbf80e, type: 2}
   CardImage: {fileID: 1909092827}
 --- !u!1 &1972177291
 GameObject:
@@ -1947,7 +1947,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f08f6734a5640c448bfa493cd5af38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  Card: {fileID: 11400000, guid: cfbcd03f5ac68ef42acf2ffbfa8c68b8, type: 2}
+  Card: {fileID: 11400000, guid: a09eac5b35464b749a3a5b7f443223df, type: 2}
   CardImage: {fileID: 1972177293}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
