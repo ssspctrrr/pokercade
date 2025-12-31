@@ -68,8 +68,10 @@ public class ScoreManager : MonoBehaviour
         }
         else if (flush != default)
         {
-            // Flush is played
-            // Adjust value of base_score for flush
+            base_score.poker_hand = "Flush";
+            base_score.score_value = 35;
+            base_score.score_mult = 4;
+            base_score.scored_cards = flush;
             return base_score;
         }
         // else both straight and flush is null, return null
@@ -106,8 +108,18 @@ public class ScoreManager : MonoBehaviour
 
     public static List<GameObject> check_flush(List<GameObject> played_cards)
     {
-        List<GameObject> scored_cards = new List<GameObject>();
-        return default;
+        for (int i = 0; i < played_cards.Count; i++) 
+        { 
+            if (i == 0)
+            {
+                continue;
+            }
+            else if (played_cards[i].GetComponent<CardData>().get_suit() != played_cards[i-1].GetComponent<CardData>().get_suit())
+            {
+                return default;
+            }
+        }
+        return played_cards;
     }
 
     public static BaseScoreData check_four_of_a_kind(List<GameObject> played_cards)
