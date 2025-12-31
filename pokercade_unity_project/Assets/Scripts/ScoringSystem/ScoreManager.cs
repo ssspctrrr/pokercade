@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Jobs;
 using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -34,9 +35,9 @@ public class ScoreManager : MonoBehaviour
         if (base_score == default) { base_score = check_full_house_3_of_a_kind_pairs(played_cards); }
         if (base_score == default) { base_score = get_high_card(played_cards); }
 
-        foreach (GameObject scored_card in base_score.scored_cards)
+        while (!base_score.is_empty()) 
         {
-            base_score.score_value = base_score.score_value + scored_card.GetComponent<CardData>().get_value();
+            base_score.score_value = base_score.score_value + base_score.dequeue().GetComponent<CardData>().get_value();
         }
         score = base_score.score_value * base_score.score_mult;
 
@@ -57,7 +58,7 @@ public class ScoreManager : MonoBehaviour
             base_score.poker_hand = "Straight Flush";
             base_score.score_value = 100;
             base_score.score_mult = 8;
-            base_score.scored_cards = played_cards;
+            base_score.initialize_scored_cards(played_cards);
             return base_score;
         }
         else if (straight != default)
@@ -65,7 +66,7 @@ public class ScoreManager : MonoBehaviour
             base_score.poker_hand = "Straight";
             base_score.score_value = 30;
             base_score.score_mult = 4;
-            base_score.scored_cards = straight;
+            base_score.initialize_scored_cards(straight);
             return base_score;
         }
         else if (flush != default)
@@ -73,7 +74,7 @@ public class ScoreManager : MonoBehaviour
             base_score.poker_hand = "Flush";
             base_score.score_value = 35;
             base_score.score_mult = 4;
-            base_score.scored_cards = flush;
+            base_score.initialize_scored_cards(flush);
             return base_score;
         }
         // else both straight and flush is null, return null
@@ -127,7 +128,6 @@ public class ScoreManager : MonoBehaviour
     public static BaseScoreData check_four_of_a_kind(List<GameObject> played_cards)
     {
         BaseScoreData base_score = new BaseScoreData();
-        base_score.scored_cards = new List<GameObject>();
         List<Rank> rank_list = new List<Rank>();
         Rank rank_of_four_of_a_kind = new Rank();
 
@@ -154,7 +154,8 @@ public class ScoreManager : MonoBehaviour
         {
             if (card.GetComponent<CardData>().get_rank() == rank_of_four_of_a_kind)
             {
-                base_score.scored_cards.Add(card);
+                Debug.Log(card.GetComponent<CardData>().Card.id);
+                base_score.enqueue(card);
             }
         }
         base_score.poker_hand = "Four of a Kind";
@@ -175,13 +176,13 @@ public class ScoreManager : MonoBehaviour
                 base_score.poker_hand = "Full House";
                 base_score.score_value = 40;
                 base_score.score_mult = 4;
-                base_score.scored_cards = played_cards; // since all played cards are scored
+                base_score.initialize_scored_cards(played_cards); // since all played cards are scored
                 return base_score;
             }
             base_score.poker_hand = "Pair";
             base_score.score_value = 10;
             base_score.score_mult = 2;
-            base_score.scored_cards = pairs;
+            base_score.initialize_scored_cards(pairs);
             return base_score;
         }
         else if (pairs != default && pairs.Count == 4) 
@@ -189,7 +190,7 @@ public class ScoreManager : MonoBehaviour
             base_score.poker_hand = "Two Pair";
             base_score.score_value = 20;
             base_score.score_mult = 2;
-            base_score.scored_cards = pairs;
+            base_score.initialize_scored_cards(pairs);
             return base_score;
         }
         else if (three_of_a_kind != default)
@@ -197,7 +198,7 @@ public class ScoreManager : MonoBehaviour
             base_score.poker_hand = "Three of a Kind";
             base_score.score_value = 30;
             base_score.score_mult = 3;
-            base_score.scored_cards = three_of_a_kind;
+            base_score.initialize_scored_cards(three_of_a_kind);
             return base_score;
         }
         else
@@ -206,21 +207,28 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    public static List<GameObject> check_for_pairs(List<GameObject> played_cards) 
+    public static List<GameObject> check_for_pairs(List<GameObject> played_cards_orig) 
     {
-        played_cards = played_cards.ToList();
+        List<GameObject> played_cards_copy = played_cards_orig.ToList();
         List<GameObject> scored_cards = new List<GameObject>();
-        List<GameObject> first_pair_check = check_pair(played_cards);
+        List<GameObject> first_pair_check = check_pair(played_cards_copy);
         if (first_pair_check != default && first_pair_check.Count > 0) // checks if there is a pair
         {
             foreach (GameObject card in first_pair_check)
             {
-                played_cards.Remove(card);
+                played_cards_copy.Remove(card);
             }
-            List<GameObject> second_pair_check = check_pair(played_cards);
+            List<GameObject> second_pair_check = check_pair(played_cards_copy);
             if (second_pair_check != default && second_pair_check.Count > 0) // checks if there is a second pair
             {
-                scored_cards = first_pair_check.Concat(second_pair_check).ToList();
+                List<GameObject> pairs = first_pair_check.Concat(second_pair_check).ToList();
+                foreach (GameObject pair_card in pairs)
+                {
+                    if (played_cards_orig.Contains(pair_card))
+                    {
+                        scored_cards.Add(pair_card);
+                    }
+                }
                 return scored_cards;
             }
         }
@@ -306,14 +314,13 @@ public class ScoreManager : MonoBehaviour
         base_score.poker_hand = "High Card";
         base_score.score_value = 5;
         base_score.score_mult = 1;
-        base_score.scored_cards = new List<GameObject>();
         if (sorted_played_cards[^1].GetComponent<CardData>().get_rank() == Rank.Ace)
         {
-            base_score.scored_cards.Add(sorted_played_cards[^1]);
+            base_score.enqueue(sorted_played_cards[^1]);
         }
         else
         {
-            base_score.scored_cards.Add(sorted_played_cards[0]);
+            base_score.enqueue(sorted_played_cards[0]);
         }
         return base_score;
 

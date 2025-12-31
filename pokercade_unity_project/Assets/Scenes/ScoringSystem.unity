@@ -1735,7 +1735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f08f6734a5640c448bfa493cd5af38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  Card: {fileID: 11400000, guid: cce7468929949d54f9c3b77c1400d9fb, type: 2}
+  Card: {fileID: 11400000, guid: 868ec6e59fe60104fb3487d9e564ccc4, type: 2}
   CardImage: {fileID: 1802876899}
 --- !u!1 &1909092825
 GameObject:
@@ -1841,7 +1841,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f08f6734a5640c448bfa493cd5af38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  Card: {fileID: 11400000, guid: fac83703f9f10614aa21341ca0666454, type: 2}
+  Card: {fileID: 11400000, guid: 868ec6e59fe60104fb3487d9e564ccc4, type: 2}
   CardImage: {fileID: 1909092827}
 --- !u!1 &1972177291
 GameObject:
@@ -1947,7 +1947,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f08f6734a5640c448bfa493cd5af38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  Card: {fileID: 11400000, guid: a09eac5b35464b749a3a5b7f443223df, type: 2}
+  Card: {fileID: 11400000, guid: 91184a85abe662941a4076c7905cbe26, type: 2}
   CardImage: {fileID: 1972177293}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
