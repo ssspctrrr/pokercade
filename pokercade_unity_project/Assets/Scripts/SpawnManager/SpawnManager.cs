@@ -34,42 +34,43 @@ public class SpawnManager : MonoBehaviour
     }
 
     IEnumerator DiscardAndRefillRoutine()
+{
+    List<GameObject> cardsToDiscard = new List<GameObject>();
+
+  
+    foreach (Transform child in handSlot)
     {
-        
-        List<GameObject> cardsToDestroy = new List<GameObject>();
-        
-        foreach (Transform child in handSlot)
+        CardInstance card = child.GetComponent<CardInstance>();
+        if (card != null && card.selected)
         {
-            CardInstance card = child.GetComponent<CardInstance>();
-            if (card != null && card.selected)
-            {
-                cardsToDestroy.Add(child.gameObject);
-            }
-        }
-
-        foreach (GameObject card in cardsToDestroy)
-        {
-            Destroy(card);
-        }
-
-   
-        yield return null;
-
-   
-        int cardsInHand = handSlot.childCount;
-        int cardsNeeded = maxHandSize - cardsInHand;
-
-
-        if (cardsNeeded > 0)
-        {
-            yield return StartCoroutine(DealHandRoutine(cardsNeeded));
-        }
-        else
-        {
+            cardsToDiscard.Add(child.gameObject);
             
-            ArrangeHand();
+           
+            Collider2D col = child.GetComponent<Collider2D>();
+            if (col != null) col.enabled = false;
         }
     }
+
+
+    if (cardsToDiscard.Count > 0)
+    {
+        yield return StartCoroutine(AnimateDiscard(cardsToDiscard));
+    }
+
+  
+    int cardsInHand = handSlot.childCount;
+    int cardsNeeded = maxHandSize - cardsInHand;
+
+ 
+    if (cardsNeeded > 0)
+    {
+        yield return StartCoroutine(DealHandRoutine(cardsNeeded));
+    }
+    else
+    {
+        ArrangeHand();
+    }
+}
 
     IEnumerator DealHandRoutine(int amount)
     {
@@ -101,6 +102,56 @@ public class SpawnManager : MonoBehaviour
         ArrangeHand();
     }
 
+    IEnumerator AnimateDiscard(List<GameObject> cardsToDiscard)
+{
+    float duration = 0.4f; 
+    float elapsed = 0f;
+
+
+    Vector3[] startPositions = new Vector3[cardsToDiscard.Count];
+    Quaternion[] startRotations = new Quaternion[cardsToDiscard.Count];
+    
+
+    float[] randomRotations = new float[cardsToDiscard.Count];
+
+    for (int i = 0; i < cardsToDiscard.Count; i++)
+    {
+        startPositions[i] = cardsToDiscard[i].transform.localPosition;
+        startRotations[i] = cardsToDiscard[i].transform.localRotation;
+        randomRotations[i] = Random.Range(-45f, 45f); 
+    }
+
+    // 2. Animate loop
+    while (elapsed < duration)
+    {
+        elapsed += Time.deltaTime;
+        float t = elapsed / duration;
+               float tSquared = t * t; 
+
+        for (int i = 0; i < cardsToDiscard.Count; i++)
+        {
+            if (cardsToDiscard[i] != null)
+            {
+                // Move DOWN by 8 units relative to start
+                Vector3 targetPos = startPositions[i] + (Vector3.down * 8.0f);
+                
+                // Lerp position
+                cardsToDiscard[i].transform.localPosition = Vector3.Lerp(startPositions[i], targetPos, tSquared);
+                
+                // Add the spin
+                Quaternion targetRot = startRotations[i] * Quaternion.Euler(0, 0, randomRotations[i]);
+                cardsToDiscard[i].transform.localRotation = Quaternion.Lerp(startRotations[i], targetRot, tSquared);
+            }
+        }
+        yield return null;
+    }
+
+ 
+    foreach (GameObject card in cardsToDiscard)
+    {
+        Destroy(card);
+    }
+}
     
     void ArrangeHand()
     {
