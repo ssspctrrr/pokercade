@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class SelectionManager : MonoBehaviour
 {
     public GameObject handSlot;
-    private List<GameObject> selectedCards;
+    public List<GameObject> selectedCards;
     private GameObject card;
     private bool cardSelected;
 
