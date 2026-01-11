@@ -38,13 +38,14 @@ public class SpawnManager : MonoBehaviour
 
             GameObject newCardObj = Instantiate(cardPrefab, handSlot);
             newCardObj.transform.position = deckTransform.position;
-            newCardObj.transform.rotation = Quaternion.identity;    
+            newCardObj.transform.rotation = Quaternion.identity;
 
             CardInstance cardLogic = newCardObj.GetComponent<CardInstance>();
             if (cardLogic != null)
             {
                 cardLogic.Initialize(selectedData);
-                cardLogic.SetFaceUp(false); 
+                cardLogic.SetFaceUp(false);
+                cardLogic.originalCoords = newCardObj.transform.localPosition;
             }
 
             float xPos = startX + (i * cardSpacing);
@@ -86,5 +87,7 @@ public class SpawnManager : MonoBehaviour
 
             yield return null; 
         }
+
+        card.GetComponent<CardInstance>().originalCoords = card.transform.localPosition;
     }
 }
