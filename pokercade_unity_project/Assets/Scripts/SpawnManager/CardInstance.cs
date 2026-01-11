@@ -35,6 +35,21 @@ public class CardInstance : MonoBehaviour, IPointerUpHandler
         if (data != null) gameObject.name = data.name; 
     }
 
+    public Rank GetRank()
+    {
+        return data.rank;
+    }
+
+    public Suit GetSuit()
+    {
+        return data.suit;
+    }
+
+    public int GetValue()
+    {
+        return data.value;
+    }
+
     public void OnPointerUp(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left)

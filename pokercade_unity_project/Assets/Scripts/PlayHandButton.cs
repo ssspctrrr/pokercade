@@ -7,6 +7,7 @@ public class PlayHandButton : MonoBehaviour
     public GameObject selectionManager;
     private List<GameObject> selectedCards;
     public GameObject playedHand;
+    public ScoreManager scoreManager;
 
     [Header("Visual Layout")]
     public float cardSpacing = 1.0f;
@@ -18,7 +19,9 @@ public class PlayHandButton : MonoBehaviour
         selectedCards = selectionManager.GetComponent<SelectionManager>().selectedCards;
         if (selectedCards.Count == 0 || selectedCards == null)
             return;
-        StartCoroutine(MoveToPlayedHandRoutine(selectedCards, selectedCards.Count, playedHand.transform));
+        int amount = selectedCards.Count;
+        StartCoroutine(MoveToPlayedHandRoutine(selectedCards, amount, playedHand.transform));
+        scoreManager.calculate_score(selectedCards);
     }
 
     IEnumerator MoveToPlayedHandRoutine(List<GameObject> selectedCards, int amount, Transform playedHand)

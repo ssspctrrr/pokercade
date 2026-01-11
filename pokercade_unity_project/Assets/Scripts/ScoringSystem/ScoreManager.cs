@@ -14,21 +14,14 @@ using static UnityEditor.ShaderData;
 
 public class ScoreManager : MonoBehaviour
 {
-    public GameObject played_cards_slot;
     public Text poker_hand_text;
     public Text score_value_text;
     public Text score_mult_text;
     public Text score_text;
-    int score;
+    int score = 0;
 
-    public void calculate_score()
+    public void calculate_score(List<GameObject> played_cards)
     {
-        List<GameObject> played_cards = new List<GameObject>();
-        foreach (Transform card_transform in played_cards_slot.transform)
-        {
-            played_cards.Add(card_transform.gameObject);
-        }
-
         BaseScoreData base_score = new BaseScoreData();
         base_score = check_straight_and_or_flush(played_cards);
         if (base_score == default) { base_score = check_four_of_a_kind(played_cards); }
@@ -37,9 +30,9 @@ public class ScoreManager : MonoBehaviour
 
         while (!base_score.is_empty()) 
         {
-            base_score.score_value = base_score.score_value + base_score.dequeue().GetComponent<CardData>().get_value();
+            base_score.score_value = base_score.score_value + base_score.dequeue().GetComponent<CardInstance>().GetValue();
         }
-        score = base_score.score_value * base_score.score_mult;
+        score += base_score.score_value * base_score.score_mult;
 
         poker_hand_text.text = base_score.poker_hand;
         score_value_text.text = base_score.score_value.ToString();
@@ -58,7 +51,7 @@ public class ScoreManager : MonoBehaviour
             base_score.poker_hand = "Straight Flush";
             base_score.score_value = 100;
             base_score.score_mult = 8;
-            base_score.initialize_scored_cards(played_cards);
+            base_score.initialize_scored_cards(played_cards.ToList());
             return base_score;
         }
         else if (straight != default)
@@ -83,17 +76,17 @@ public class ScoreManager : MonoBehaviour
 
     public static List<GameObject> check_straight(List<GameObject> played_cards)
     {
-        List<GameObject> sorted_played_cards = played_cards.OrderBy(card => (int)card.GetComponent<CardData>().Card.rank).ToList();
+        List<GameObject> sorted_played_cards = played_cards.OrderBy(card => (int)card.GetComponent<CardInstance>().GetRank()).ToList();
         List<int> int_rank_list = new List<int>();
         bool is_normal_straight = true;
         for (int i = 0; i < sorted_played_cards.Count; i++)
         {
-            int_rank_list.Add((int)sorted_played_cards[i].GetComponent<CardData>().get_rank());
+            int_rank_list.Add((int)sorted_played_cards[i].GetComponent<CardInstance>().GetRank());
             if (i == 0)
             {
                 continue;
             }
-            else if (sorted_played_cards[i].GetComponent<CardData>().get_rank() - sorted_played_cards[i-1].GetComponent<CardData>().get_rank() != 1)
+            else if (sorted_played_cards[i].GetComponent<CardInstance>().GetRank() - sorted_played_cards[i-1].GetComponent<CardInstance>().GetRank() != 1)
             {
                 is_normal_straight = false;
             }
@@ -101,7 +94,7 @@ public class ScoreManager : MonoBehaviour
         List<int> sorted_int_rank_list = int_rank_list.OrderBy(rank => rank).ToList();
         if (is_normal_straight || sorted_int_rank_list.SequenceEqual(new List<int> {1,10,11,12,13}))
         {
-            return played_cards;
+            return played_cards.ToList();
         }
         else
         {
@@ -117,12 +110,12 @@ public class ScoreManager : MonoBehaviour
             {
                 continue;
             }
-            else if (played_cards[i].GetComponent<CardData>().get_suit() != played_cards[i-1].GetComponent<CardData>().get_suit())
+            else if (played_cards[i].GetComponent<CardInstance>().GetSuit() != played_cards[i-1].GetComponent<CardInstance>().GetSuit())
             {
                 return default;
             }
         }
-        return played_cards;
+        return played_cards.ToList();
     }
 
     public static BaseScoreData check_four_of_a_kind(List<GameObject> played_cards)
@@ -133,8 +126,8 @@ public class ScoreManager : MonoBehaviour
 
         foreach (GameObject card in played_cards)
         {
-            CardData card_data = card.GetComponent<CardData>();
-            rank_list.Add(card_data.get_rank());
+            CardInstance card_data = card.GetComponent<CardInstance>();
+            rank_list.Add(card_data.GetRank());
         }
 
         foreach (Rank current_rank in rank_list)
@@ -152,9 +145,8 @@ public class ScoreManager : MonoBehaviour
 
         foreach (GameObject card in played_cards)
         {
-            if (card.GetComponent<CardData>().get_rank() == rank_of_four_of_a_kind)
+            if (card.GetComponent<CardInstance>().GetRank() == rank_of_four_of_a_kind)
             {
-                Debug.Log(card.GetComponent<CardData>().Card.id);
                 base_score.enqueue(card);
             }
         }
@@ -176,7 +168,7 @@ public class ScoreManager : MonoBehaviour
                 base_score.poker_hand = "Full House";
                 base_score.score_value = 40;
                 base_score.score_mult = 4;
-                base_score.initialize_scored_cards(played_cards); // since all played cards are scored
+                base_score.initialize_scored_cards(played_cards.ToList()); // since all played cards are scored
                 return base_score;
             }
             base_score.poker_hand = "Pair";
@@ -243,8 +235,8 @@ public class ScoreManager : MonoBehaviour
 
         foreach (GameObject card in played_cards)
         {
-            CardData card_data = card.GetComponent<CardData>();
-            rank_list.Add(card_data.get_rank());
+            CardInstance card_data = card.GetComponent<CardInstance>();
+            rank_list.Add(card_data.GetRank());
         }
 
         foreach (Rank current_rank in rank_list)
@@ -262,7 +254,7 @@ public class ScoreManager : MonoBehaviour
 
         foreach (GameObject card in played_cards)
         {
-            if (card.GetComponent<CardData>().get_rank() == rank_of_pair)
+            if (card.GetComponent<CardInstance>().GetRank() == rank_of_pair)
             {
                 scored_cards.Add(card);
             }
@@ -278,8 +270,8 @@ public class ScoreManager : MonoBehaviour
 
         foreach (GameObject card in played_cards)
         {
-            CardData card_data = card.GetComponent<CardData>();
-            rank_list.Add(card_data.get_rank());
+            CardInstance card_data = card.GetComponent<CardInstance>();
+            rank_list.Add(card_data.GetRank());
         }
 
         foreach (Rank current_rank in rank_list)
@@ -297,7 +289,7 @@ public class ScoreManager : MonoBehaviour
 
         foreach (GameObject card in played_cards)
         {
-            if (card.GetComponent<CardData>().get_rank() == rank_of_three_of_a_kind)
+            if (card.GetComponent<CardInstance>().GetRank() == rank_of_three_of_a_kind)
             {
                 scored_cards.Add(card);
             }
@@ -307,14 +299,14 @@ public class ScoreManager : MonoBehaviour
 
     public static BaseScoreData get_high_card(List<GameObject> played_cards)
     {
-        List<GameObject> sorted_played_cards = played_cards.OrderByDescending(card => (int)card.GetComponent<CardData>().Card.rank).ToList();
+        List<GameObject> sorted_played_cards = played_cards.OrderByDescending(card => (int)card.GetComponent<CardInstance>().GetRank()).ToList();
 
         // adjust base_score for high card
         BaseScoreData base_score = new BaseScoreData();
         base_score.poker_hand = "High Card";
         base_score.score_value = 5;
         base_score.score_mult = 1;
-        if (sorted_played_cards[^1].GetComponent<CardData>().get_rank() == Rank.Ace)
+        if (sorted_played_cards[^1].GetComponent<CardInstance>().GetRank() == Rank.Ace)
         {
             base_score.enqueue(sorted_played_cards[^1]);
         }
