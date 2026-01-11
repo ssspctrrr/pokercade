@@ -239,7 +239,7 @@ public class SpawnManager : MonoBehaviour
         
         if (rankA != rankB)
         {
-            return rankA.CompareTo(rankB); 
+            return -rankA.CompareTo(rankB); 
         }
         
         int suitA = (int)a.GetSuit();
