@@ -148,6 +148,7 @@ public class SpawnManager : MonoBehaviour
     
     void ArrangeHand()
     {
+        SortHandByRank();
         int totalCards = handSlot.childCount;
         float startX = -((totalCards - 1) * cardSpacing) / 2.0f;
 
