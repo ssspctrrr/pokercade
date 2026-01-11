@@ -36,8 +36,6 @@ public class SpawnManager : MonoBehaviour
     IEnumerator DiscardAndRefillRoutine()
 {
     List<GameObject> cardsToDiscard = new List<GameObject>();
-
-  
     foreach (Transform child in handSlot)
     {
         CardInstance card = child.GetComponent<CardInstance>();
@@ -45,33 +43,31 @@ public class SpawnManager : MonoBehaviour
         {
             cardsToDiscard.Add(child.gameObject);
             
-           
+
             Collider2D col = child.GetComponent<Collider2D>();
             if (col != null) col.enabled = false;
         }
     }
 
-
     if (cardsToDiscard.Count > 0)
     {
         yield return StartCoroutine(AnimateDiscard(cardsToDiscard));
     }
+    yield return null; 
 
-  
     int cardsInHand = handSlot.childCount;
     int cardsNeeded = maxHandSize - cardsInHand;
 
- 
     if (cardsNeeded > 0)
     {
         yield return StartCoroutine(DealHandRoutine(cardsNeeded));
     }
     else
     {
+    
         ArrangeHand();
     }
 }
-
     IEnumerator DealHandRoutine(int amount)
     {
         
