@@ -21,7 +21,6 @@ public class PlayHandButton : MonoBehaviour
             return;
         int amount = selectedCards.Count;
         StartCoroutine(MoveToPlayedHandRoutine(selectedCards, amount, playedHand.transform));
-        scoreManager.calculate_score(selectedCards);
     }
 
     IEnumerator MoveToPlayedHandRoutine(List<GameObject> selectedCards, int amount, Transform playedHand)
@@ -42,10 +41,11 @@ public class PlayHandButton : MonoBehaviour
             Vector3 targetPos = new Vector3(xPos, 0, 0);
             Quaternion targetRot = Quaternion.identity;
 
-            StartCoroutine(AnimateCardToPlayedHand(card, targetPos, targetRot, startPos, startRot));
+            //StartCoroutine(AnimateCardToPlayedHand(card, targetPos, targetRot, startPos, startRot));
 
-            yield return new WaitForSeconds(0.1f);
+            yield return AnimateCardToPlayedHand(card, targetPos, targetRot, startPos, startRot);
         }
+        scoreManager.calculate_score(selectedCards);
     }
 
     IEnumerator AnimateCardToPlayedHand(GameObject card, Vector3 targetPos, Quaternion targetRot, Vector3 startPos, Quaternion startRot)

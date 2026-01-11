@@ -11,7 +11,6 @@ public class BaseScoreData
 
     public void enqueue(GameObject card)
     {
-        Debug.Log("BaseScoreData. Line 14");
         scored_cards.enqueue(card);
     }
 

@@ -15,7 +15,6 @@ public class ScoredCardsQueue
 
     public void enqueue(GameObject card)
     {
-        Debug.Log("ScoredCardsQueue. Line 18");
         queue_scored_cards.Add(card);
     }
 
