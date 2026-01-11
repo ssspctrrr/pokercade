@@ -20,8 +20,37 @@ public class ScoreManager : MonoBehaviour
     public Text score_text;
     int score = 0;
 
+public void calculate_score(List<GameObject> played_cards, System.Action onComplete = null)
+{
+    StartCoroutine(CalculateScoreRoutine(played_cards, onComplete));
+}
+
+private System.Collections.IEnumerator CalculateScoreRoutine(List<GameObject> played_cards, System.Action onComplete)
+{
+    BaseScoreData base_score = new BaseScoreData();
+        base_score = check_straight_and_or_flush(played_cards);
+        if (base_score == default) { base_score = check_four_of_a_kind(played_cards); }
+        if (base_score == default) { base_score = check_full_house_3_of_a_kind_pairs(played_cards); }
+        if (base_score == default) { base_score = get_high_card(played_cards); }
+
+        while (!base_score.is_empty()) 
+        {
+            base_score.score_value = base_score.score_value + base_score.dequeue().GetComponent<CardInstance>().GetValue();
+        }
+        score += base_score.score_value * base_score.score_mult;
+
+        poker_hand_text.text = base_score.poker_hand;
+        score_value_text.text = base_score.score_value.ToString();
+        score_mult_text.text = base_score.score_mult.ToString();
+        score_text.text = score.ToString();
+
+    yield return new WaitForSeconds(1.0f); 
+
+    onComplete?.Invoke();
+}
     public void calculate_score(List<GameObject> played_cards)
     {
+        
         BaseScoreData base_score = new BaseScoreData();
         base_score = check_straight_and_or_flush(played_cards);
         if (base_score == default) { base_score = check_four_of_a_kind(played_cards); }

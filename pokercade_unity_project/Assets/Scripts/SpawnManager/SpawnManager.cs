@@ -128,13 +128,10 @@ public class SpawnManager : MonoBehaviour
         {
             if (cardsToDiscard[i] != null)
             {
-                // Move DOWN by 8 units relative to start
                 Vector3 targetPos = startPositions[i] + (Vector3.down * 8.0f);
                 
-                // Lerp position
                 cardsToDiscard[i].transform.localPosition = Vector3.Lerp(startPositions[i], targetPos, tSquared);
                 
-                // Add the spin
                 Quaternion targetRot = startRotations[i] * Quaternion.Euler(0, 0, randomRotations[i]);
                 cardsToDiscard[i].transform.localRotation = Quaternion.Lerp(startRotations[i], targetRot, tSquared);
             }
@@ -208,4 +205,18 @@ public class SpawnManager : MonoBehaviour
             logic.UpdateBasePosition(localTargetPos);
         }
     }
+    public void RefillHand()
+{
+    int cardsInHand = handSlot.childCount;
+    int cardsNeeded = maxHandSize - cardsInHand;
+
+    if (cardsNeeded > 0)
+    {
+        StartCoroutine(DealHandRoutine(cardsNeeded));
+    }
+    else
+    {
+        ArrangeHand(); 
+    }
+}
 }

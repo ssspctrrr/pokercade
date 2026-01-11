@@ -8,6 +8,7 @@ public class PlayHandButton : MonoBehaviour
     private List<GameObject> selectedCards;
     public GameObject playedHand;
     public ScoreManager scoreManager;
+    public SpawnManager spawnManager;
 
     [Header("Visual Layout")]
     public float cardSpacing = 1.0f;
@@ -19,9 +20,32 @@ public class PlayHandButton : MonoBehaviour
         selectedCards = selectionManager.GetComponent<SelectionManager>().selectedCards;
         if (selectedCards.Count == 0 || selectedCards == null)
             return;
+            
         int amount = selectedCards.Count;
+        
         StartCoroutine(MoveToPlayedHandRoutine(selectedCards, amount, playedHand.transform));
-        scoreManager.calculate_score(selectedCards);
+        
+        scoreManager.calculate_score(selectedCards, () => 
+        {
+            StartCoroutine(EndHandSequence(selectedCards));
+        });
+    }
+    IEnumerator EndHandSequence(List<GameObject> cardsToDestroy)
+    {
+
+        foreach (GameObject card in cardsToDestroy)
+        {
+            Destroy(card);
+        }
+        
+        selectedCards.Clear();
+
+        yield return null; 
+
+        if (spawnManager != null)
+        {
+            spawnManager.RefillHand();
+        }
     }
 
     IEnumerator MoveToPlayedHandRoutine(List<GameObject> selectedCards, int amount, Transform playedHand)
