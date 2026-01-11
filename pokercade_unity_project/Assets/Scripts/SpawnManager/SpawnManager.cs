@@ -217,6 +217,38 @@ public class SpawnManager : MonoBehaviour
     else
     {
         ArrangeHand(); 
+        }
     }
-}
+    void SortHandByRank()
+{
+    List<CardInstance> cardsInHand = new List<CardInstance>();
+    foreach (Transform child in handSlot)
+    {
+        CardInstance card = child.GetComponent<CardInstance>();
+        if (card != null)
+        {
+            cardsInHand.Add(card);
+        }
+    }
+
+    cardsInHand.Sort((a, b) => 
+    {
+        int rankA = (int)a.GetRank();
+        int rankB = (int)b.GetRank();
+        
+        if (rankA != rankB)
+        {
+            return rankA.CompareTo(rankB); 
+        }
+        
+        int suitA = (int)a.GetSuit();
+        int suitB = (int)b.GetSuit();
+        return suitA.CompareTo(suitB);
+    });
+
+    for (int i = 0; i < cardsInHand.Count; i++)
+    {
+        cardsInHand[i].transform.SetSiblingIndex(i);
+    }
+    }
 }
