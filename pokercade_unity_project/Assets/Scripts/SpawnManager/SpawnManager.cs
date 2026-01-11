@@ -14,6 +14,7 @@ public class SpawnManager : MonoBehaviour
     public float cardSpacing = 1.0f;   
     public float arcIntensity = 5.0f;
     public float moveSpeed = 2.0f; 
+    public int maxHandSize = 8; 
     
     [Header("Data Source")]
     public List<card_data> allCardData = new List<card_data>(); 
@@ -22,22 +23,67 @@ public class SpawnManager : MonoBehaviour
     void Start()
     {
         currentDeck.AddRange(allCardData);
-        StartCoroutine(DealHandRoutine(8));
+       
+        StartCoroutine(DealHandRoutine(maxHandSize));
+    }
+
+ 
+    public void OnDiscardButtonPress()
+    {
+        StartCoroutine(DiscardAndRefillRoutine());
+    }
+
+    IEnumerator DiscardAndRefillRoutine()
+    {
+        
+        List<GameObject> cardsToDestroy = new List<GameObject>();
+        
+        foreach (Transform child in handSlot)
+        {
+            CardInstance card = child.GetComponent<CardInstance>();
+            if (card != null && card.selected)
+            {
+                cardsToDestroy.Add(child.gameObject);
+            }
+        }
+
+        foreach (GameObject card in cardsToDestroy)
+        {
+            Destroy(card);
+        }
+
+   
+        yield return null;
+
+   
+        int cardsInHand = handSlot.childCount;
+        int cardsNeeded = maxHandSize - cardsInHand;
+
+
+        if (cardsNeeded > 0)
+        {
+            yield return StartCoroutine(DealHandRoutine(cardsNeeded));
+        }
+        else
+        {
+            
+            ArrangeHand();
+        }
     }
 
     IEnumerator DealHandRoutine(int amount)
     {
-        float startX = -((amount - 1) * cardSpacing) / 2.0f;
-
+        
         for (int i = 0; i < amount; i++)
         {
-            if (currentDeck.Count == 0) yield break;
+            if (currentDeck.Count == 0) break;
 
             int randomIndex = Random.Range(0, currentDeck.Count);
             card_data selectedData = currentDeck[randomIndex];
+            currentDeck.RemoveAt(randomIndex); 
 
             GameObject newCardObj = Instantiate(cardPrefab, handSlot);
-            newCardObj.transform.position = deckTransform.position;
+            newCardObj.transform.position = deckTransform.position; 
             newCardObj.transform.rotation = Quaternion.identity;
 
             CardInstance cardLogic = newCardObj.GetComponent<CardInstance>();
@@ -45,23 +91,42 @@ public class SpawnManager : MonoBehaviour
             {
                 cardLogic.Initialize(selectedData);
                 cardLogic.SetFaceUp(false);
-                cardLogic.originalCoords = newCardObj.transform.localPosition;
             }
+            
+            
+            yield return new WaitForSeconds(0.1f);
+        }
 
+        
+        ArrangeHand();
+    }
+
+    
+    void ArrangeHand()
+    {
+        int totalCards = handSlot.childCount;
+        float startX = -((totalCards - 1) * cardSpacing) / 2.0f;
+
+        for (int i = 0; i < totalCards; i++)
+        {
+            Transform cardTransform = handSlot.GetChild(i);
+            CardInstance cardLogic = cardTransform.GetComponent<CardInstance>();
+
+            
             float xPos = startX + (i * cardSpacing);
-            float distFromCenter = i - ((amount - 1) / 2.0f);
+            float distFromCenter = i - ((totalCards - 1) / 2.0f);
             float yPos = -Mathf.Abs(distFromCenter) * 0.2f;
             float zRot = -distFromCenter * arcIntensity;
 
-            SortingGroup sg = newCardObj.GetComponent<SortingGroup>();
-            if (sg != null) sg.sortingOrder = i;
-
             Vector3 targetPos = new Vector3(xPos, yPos, 0); 
             Quaternion targetRot = Quaternion.Euler(0, 0, zRot);
-            
-            StartCoroutine(AnimateCardToHand(newCardObj, targetPos, targetRot, cardLogic));
 
-            yield return new WaitForSeconds(0.2f);
+            
+            SortingGroup sg = cardTransform.GetComponent<SortingGroup>();
+            if (sg != null) sg.sortingOrder = i;
+
+            
+            StartCoroutine(AnimateCardToHand(cardTransform.gameObject, targetPos, targetRot, cardLogic));
         }
     }
 
@@ -73,8 +138,9 @@ public class SpawnManager : MonoBehaviour
 
         while (t < 1)
         {
+            if (card == null) yield break; 
+
             t += Time.deltaTime * moveSpeed;
-            
             float smoothT = 1f - Mathf.Pow(1f - t, 3); 
 
             card.transform.localPosition = Vector3.Lerp(startPos, localTargetPos, smoothT);
@@ -88,6 +154,11 @@ public class SpawnManager : MonoBehaviour
             yield return null; 
         }
 
-        card.GetComponent<CardInstance>().originalCoords = card.transform.localPosition;
+    
+        if (logic != null && card != null)
+        {
+            card.transform.localPosition = localTargetPos; 
+            logic.UpdateBasePosition(localTargetPos);
+        }
     }
 }

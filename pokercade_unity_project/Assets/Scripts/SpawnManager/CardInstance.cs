@@ -48,12 +48,14 @@ public class CardInstance : MonoBehaviour, IPointerUpHandler
             transform.localPosition = originalCoords;
     }
 
-    public void UpdateBasePosition(Vector3 newLocalPos) // invoke tong function if nadrag ung card (for futureproofing lang)
+    public void UpdateBasePosition(Vector3 newLocalPos)
+{
+    originalCoords = newLocalPos;
+    if (!selected)
     {
-        originalCoords = newLocalPos;
-        if (!selected)
-            transform.localPosition = originalCoords;
+        transform.localPosition = originalCoords;
     }
+}
 
     public void SetFaceUp(bool isFaceUp)
     {
