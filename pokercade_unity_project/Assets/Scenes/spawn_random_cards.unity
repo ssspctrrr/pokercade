@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 283362612}
   - component: {fileID: 283362611}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Discard Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1056,6 +1056,7 @@ MonoBehaviour:
   selectionManager: {fileID: 1286376328}
   playedHand: {fileID: 1754111816}
   scoreManager: {fileID: 826131867}
+  spawnManager: {fileID: 1861368260}
   cardSpacing: 1
   arcIntensity: 5
   moveSpeed: 2
@@ -1086,7 +1087,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98d73c5125ce22a419f759b137f59705, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
-  played_cards_slot: {fileID: 0}
   poker_hand_text: {fileID: 524175909}
   score_value_text: {fileID: 1811696647}
   score_mult_text: {fileID: 1727988396}
@@ -1525,7 +1525,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98d73c5125ce22a419f759b137f59705, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
-  played_cards_slot: {fileID: 1754111816}
   poker_hand_text: {fileID: 524175909}
   score_value_text: {fileID: 1811696647}
   score_mult_text: {fileID: 1727988396}
