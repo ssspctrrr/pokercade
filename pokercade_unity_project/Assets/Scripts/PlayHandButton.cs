@@ -17,18 +17,35 @@ public class PlayHandButton : MonoBehaviour
     public float arcIntensity = 5.0f;
     public float moveSpeed = 10.0f;
 
-    public void PlayHand(float duration = 1f)
+    // Inside PlayHandButton.cs
+
+public void PlayHand(float duration = 1f)
+{
+    // --- NEW CODE START ---
+    // 1. Check if GameManager allows playing (Hands > 0)
+    if (GameManager.instance.handsRemaining <= 0) 
     {
-        selectedCards = selectionManager.GetComponent<SelectionManager>().selectedCards;
-        if (selectedCards.Count == 0 || selectedCards == null)
-            return;
-
-        EnableOrDisableCardSelection(hand, false);
-
-        int amount = selectedCards.Count;
-
-        StartCoroutine(MoveToPlayedHandRoutine(selectedCards, amount, playedHand.transform));
+        Debug.Log("No hands remaining!");
+        return;
     }
+
+    // 2. Try to use a hand. If successful, proceed.
+    if (!GameManager.instance.TryUseHand())
+        return;
+    // --- NEW CODE END ---
+
+    selectedCards = selectionManager.GetComponent<SelectionManager>().selectedCards;
+    
+    // Safety check
+    if (selectedCards == null || selectedCards.Count == 0)
+        return;
+
+    EnableOrDisableCardSelection(hand, false);
+
+    int amount = selectedCards.Count;
+
+    StartCoroutine(MoveToPlayedHandRoutine(selectedCards, amount, playedHand.transform));
+}
     IEnumerator EndHandSequence(List<GameObject> cardsToDestroy)
     {
 

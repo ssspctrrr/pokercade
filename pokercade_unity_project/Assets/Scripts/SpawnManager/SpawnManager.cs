@@ -9,6 +9,8 @@ public class SpawnManager : MonoBehaviour
     public GameObject cardPrefab;   
     public Transform handSlot;
     public Transform deckTransform; 
+    public SelectionManager selectionManager; 
+    public ScoreManager scoreManager;
     
     [Header("Visual Layout")]
     public float cardSpacing = 1.0f;   
@@ -20,18 +22,21 @@ public class SpawnManager : MonoBehaviour
     public List<card_data> allCardData = new List<card_data>(); 
     private List<card_data> currentDeck = new List<card_data>();
 
-    void Start()
-    {
-        currentDeck.AddRange(allCardData);
-       
-        StartCoroutine(DealHandRoutine(maxHandSize));
-    }
 
- 
-    public void OnDiscardButtonPress()
+
+public void OnDiscardButtonPress()
+{
+    // Check GameManager for discards remaining
+    if (GameManager.instance.TryUseDiscard())
     {
         StartCoroutine(DiscardAndRefillRoutine());
     }
+    else
+    {
+        Debug.Log("No discards remaining!");
+        // Optional: Play a "buzzer" sound or shake effect here
+    }
+}
 
     IEnumerator DiscardAndRefillRoutine()
 {
@@ -252,4 +257,81 @@ public class SpawnManager : MonoBehaviour
         cardsInHand[i].transform.SetSiblingIndex(i);
     }
     }
+    public void OnPlayHandButtonPress()
+{
+    // Don't play if animations are running or no hands left
+    if (GameManager.instance.handsRemaining <= 0) return;
+
+    // Get selected cards
+    List<GameObject> cardsToPlay = selectionManager.selectedCards;
+    
+    // Basic validation (must play at least 1 card)
+    if (cardsToPlay.Count == 0) return;
+
+    if (GameManager.instance.TryUseHand())
+    {
+        StartCoroutine(PlayHandRoutine(cardsToPlay));
+    }
+}
+IEnumerator PlayHandRoutine(List<GameObject> cardsToPlay)
+{
+    // 1. Disable interactions
+    foreach (var card in cardsToPlay)
+    {
+        card.GetComponent<Collider2D>().enabled = false;
+        // Optional: Move them slightly up to indicate they are "Played"
+    }
+
+    // 2. Calculate Score (Wait for the ScoreManager routine to finish)
+    bool scoringFinished = false;
+    
+    // We pass a lambda function (Action) to know when scoring is done
+    scoreManager.calculate_score(cardsToPlay, () => { scoringFinished = true; });
+
+    // Wait until callback sets scoringFinished to true
+    while (!scoringFinished) yield return null;
+
+    // 3. Add the calculated score to the GameManager
+    // (Note: You need to modify ScoreManager to return the value or grab it here)
+    // For now, let's assume ScoreManager updated its internal score, 
+    // we need to pass that to GameManager. See Step 3 below.
+
+    // 4. Discard the played cards (Visual animation)
+    yield return StartCoroutine(AnimateDiscard(cardsToPlay));
+
+    // 5. Refill Hand
+    RefillHand();
+}
+public void ResetDeck()
+{
+    currentDeck.Clear(); // Remove any leftover cards
+    currentDeck.AddRange(allCardData); // Put all 52 cards back in
+}
+// Inside SpawnManager.cs
+
+public void TriggerNextLevel()
+{
+    StartCoroutine(NextLevelSequence());
+}
+
+IEnumerator NextLevelSequence()
+{
+    // 1. Destroy ALL existing cards in the hand
+    // We iterate backwards to safely remove them
+    for (int i = handSlot.childCount - 1; i >= 0; i--)
+    {
+        Destroy(handSlot.GetChild(i).gameObject);
+    }
+
+    // 2. WAIT A FRAME (Crucial!)
+    // This gives Unity time to actually remove the objects from memory
+    yield return null;
+
+    // 3. Reset the internal deck data
+    currentDeck.Clear();
+    currentDeck.AddRange(allCardData);
+
+    // 4. Deal a fresh hand (This triggers the animation)
+    yield return StartCoroutine(DealHandRoutine(maxHandSize));
+}
 }

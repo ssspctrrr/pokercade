@@ -37,25 +37,46 @@ public class ScoreManager : MonoBehaviour
     onComplete?.Invoke();
     }
 
-    IEnumerator AnimateScoreCard(BaseScoreData baseScore)
+    // Replace the entire 'AnimateScoreCard' IEnumerator with this:
+IEnumerator AnimateScoreCard(BaseScoreData baseScore)
+{
+    // 1. Loop through every card that scored (e.g., the 5 cards in a flush)
+    while (!baseScore.is_empty())
     {
-        while (!baseScore.is_empty())
+        GameObject card = baseScore.dequeue();
+        Vector3 startPos = card.transform.localPosition;
+
+        // Visual: Move card up
+        card.transform.localPosition += (card.transform.up);
+        yield return new WaitForSeconds(0.5f);
+
+        // --- THE MISSING LOGIC ---
+        // Add this card's specific value (2, 10, 11, etc.) to the Chip Counter
+        if (card.GetComponent<CardInstance>() != null)
         {
-            GameObject card = baseScore.dequeue();
-            Vector3 startPos = card.transform.localPosition;
-
-            card.transform.localPosition += (card.transform.up);
-            yield return new WaitForSeconds(0.5f);
-
             baseScore.score_value += card.GetComponent<CardInstance>().GetValue();
-            yield return StartCoroutine(textAnimation.TextShaker(scoreValueText, baseScore.score_value.ToString()));
+        }
+        // -------------------------
 
-            card.transform.localPosition = startPos;
+        // Visual: Shake the "Chips" text (scoreValueText) to show the number going up
+        if (scoreValueText != null)
+        {
+            yield return StartCoroutine(textAnimation.TextShaker(scoreValueText, baseScore.score_value.ToString()));
         }
 
-        score += baseScore.score_value * baseScore.score_mult;
-        textAnimation.transitionTextViaShake(scoreText, score.ToString());
+        // Visual: Move card back down
+        card.transform.localPosition = startPos;
     }
+
+    // 2. Calculate the Final Hand Total (Chips * Mult)
+    int finalHandScore = baseScore.score_value * baseScore.score_mult;
+
+    // 3. Send the total to the Game Manager to add to your Level Progress
+    if (GameManager.instance != null)
+    {
+        GameManager.instance.AddScore(finalHandScore);
+    }
+}
 
     public void ResetText()
     {
