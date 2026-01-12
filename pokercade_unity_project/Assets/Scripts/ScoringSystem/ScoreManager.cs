@@ -86,6 +86,9 @@ IEnumerator AnimateScoreCard(BaseScoreData baseScore)
     }
     public static BaseScoreData check_straight_and_or_flush(List<GameObject> played_cards)
     {
+        if (played_cards.Count != 5)
+            return default;
+        
         BaseScoreData base_score = new BaseScoreData();
         List<GameObject> straight = check_straight(played_cards);
         List<GameObject> flush = check_flush(played_cards);
