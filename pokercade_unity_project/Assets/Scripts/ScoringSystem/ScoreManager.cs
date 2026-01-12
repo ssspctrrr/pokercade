@@ -1,81 +1,75 @@
-using JetBrains.Annotations;
-using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Jobs;
-using Unity.VisualScripting;
-using Unity.VisualScripting.FullSerializer;
-using UnityEditor;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.UI;
-using static UnityEditor.ShaderData;
+using TMPro;
+using System.Collections;
 
 public class ScoreManager : MonoBehaviour
 {
-    public Text poker_hand_text;
-    public Text score_value_text;
-    public Text score_mult_text;
-    public Text score_text;
+    public TextMeshProUGUI pokerHandText;
+    public TextMeshProUGUI scoreMultText;
+    public TextMeshProUGUI scoreValueText;
+    public TextMeshProUGUI scoreText;
     int score = 0;
+    public int scoredAnimationOffset = 3;
+    public TextAnimations textAnimation;
 
-public void calculate_score(List<GameObject> played_cards, System.Action onComplete = null)
-{
-    StartCoroutine(CalculateScoreRoutine(played_cards, onComplete));
-}
-
-private System.Collections.IEnumerator CalculateScoreRoutine(List<GameObject> played_cards, System.Action onComplete)
-{
-    BaseScoreData base_score = new BaseScoreData();
-        base_score = check_straight_and_or_flush(played_cards);
-        if (base_score == default) { base_score = check_four_of_a_kind(played_cards); }
-        if (base_score == default) { base_score = check_full_house_3_of_a_kind_pairs(played_cards); }
-        if (base_score == default) { base_score = get_high_card(played_cards); }
-
-        while (!base_score.is_empty()) 
-        {
-            base_score.score_value = base_score.score_value + base_score.dequeue().GetComponent<CardInstance>().GetValue();
-        }
-        score += base_score.score_value * base_score.score_mult;
-
-        poker_hand_text.text = base_score.poker_hand;
-        score_value_text.text = base_score.score_value.ToString();
-        score_mult_text.text = base_score.score_mult.ToString();
-        score_text.text = score.ToString();
-
-    yield return new WaitForSeconds(1.0f); 
-
-    onComplete?.Invoke();
-}
-    public void calculate_score(List<GameObject> played_cards)
+    public void calculate_score(List<GameObject> played_cards, System.Action onComplete = null)
     {
-        
+        StartCoroutine(CalculateScoreRoutine(played_cards, onComplete));
+    }
+
+    private IEnumerator CalculateScoreRoutine(List<GameObject> played_cards, System.Action onComplete)
+    {
+
         BaseScoreData base_score = new BaseScoreData();
         base_score = check_straight_and_or_flush(played_cards);
         if (base_score == default) { base_score = check_four_of_a_kind(played_cards); }
         if (base_score == default) { base_score = check_full_house_3_of_a_kind_pairs(played_cards); }
         if (base_score == default) { base_score = get_high_card(played_cards); }
 
-        while (!base_score.is_empty()) 
-        {
-            base_score.score_value = base_score.score_value + base_score.dequeue().GetComponent<CardInstance>().GetValue();
-        }
-        score += base_score.score_value * base_score.score_mult;
+        textAnimation.transitionTextViaShake(pokerHandText, base_score.poker_hand);
+        textAnimation.transitionTextViaShake(scoreMultText, base_score.score_mult.ToString());
+        textAnimation.transitionTextViaShake(scoreValueText, base_score.score_value.ToString());
 
-        poker_hand_text.text = base_score.poker_hand;
-        score_value_text.text = base_score.score_value.ToString();
-        score_mult_text.text = base_score.score_mult.ToString();
-        score_text.text = score.ToString();
+        yield return StartCoroutine(AnimateScoreCard(base_score));
+
+    onComplete?.Invoke();
     }
 
+    IEnumerator AnimateScoreCard(BaseScoreData baseScore)
+    {
+        while (!baseScore.is_empty())
+        {
+            GameObject card = baseScore.dequeue();
+            Vector3 startPos = card.transform.localPosition;
+
+            card.transform.localPosition += (card.transform.up);
+            yield return new WaitForSeconds(0.5f);
+
+            baseScore.score_value += card.GetComponent<CardInstance>().GetValue();
+            yield return StartCoroutine(textAnimation.TextShaker(scoreValueText, baseScore.score_value.ToString()));
+
+            card.transform.localPosition = startPos;
+        }
+
+        score += baseScore.score_value * baseScore.score_mult;
+        textAnimation.transitionTextViaShake(scoreText, score.ToString());
+    }
+
+    public void ResetText()
+    {
+        textAnimation.transitionTextViaShake(pokerHandText, "???PokerHand???");
+        textAnimation.transitionTextViaShake(scoreMultText, "??Mult??");
+        textAnimation.transitionTextViaShake(scoreValueText, "??Value??");
+    }
     public static BaseScoreData check_straight_and_or_flush(List<GameObject> played_cards)
     {
         BaseScoreData base_score = new BaseScoreData();
         List<GameObject> straight = check_straight(played_cards);
         List<GameObject> flush = check_flush(played_cards);
 
-        if (straight != default && flush != default) 
+        if (straight != default && flush != default)
         {
             base_score.poker_hand = "Straight Flush";
             base_score.score_value = 100;
@@ -115,13 +109,13 @@ private System.Collections.IEnumerator CalculateScoreRoutine(List<GameObject> pl
             {
                 continue;
             }
-            else if (sorted_played_cards[i].GetComponent<CardInstance>().GetRank() - sorted_played_cards[i-1].GetComponent<CardInstance>().GetRank() != 1)
+            else if (sorted_played_cards[i].GetComponent<CardInstance>().GetRank() - sorted_played_cards[i - 1].GetComponent<CardInstance>().GetRank() != 1)
             {
                 is_normal_straight = false;
             }
         }
         List<int> sorted_int_rank_list = int_rank_list.OrderBy(rank => rank).ToList();
-        if (is_normal_straight || sorted_int_rank_list.SequenceEqual(new List<int> {1,10,11,12,13}))
+        if (is_normal_straight || sorted_int_rank_list.SequenceEqual(new List<int> { 1, 10, 11, 12, 13 }))
         {
             return played_cards.ToList();
         }
@@ -133,13 +127,13 @@ private System.Collections.IEnumerator CalculateScoreRoutine(List<GameObject> pl
 
     public static List<GameObject> check_flush(List<GameObject> played_cards)
     {
-        for (int i = 0; i < played_cards.Count; i++) 
-        { 
+        for (int i = 0; i < played_cards.Count; i++)
+        {
             if (i == 0)
             {
                 continue;
             }
-            else if (played_cards[i].GetComponent<CardInstance>().GetSuit() != played_cards[i-1].GetComponent<CardInstance>().GetSuit())
+            else if (played_cards[i].GetComponent<CardInstance>().GetSuit() != played_cards[i - 1].GetComponent<CardInstance>().GetSuit())
             {
                 return default;
             }
@@ -206,7 +200,7 @@ private System.Collections.IEnumerator CalculateScoreRoutine(List<GameObject> pl
             base_score.initialize_scored_cards(pairs);
             return base_score;
         }
-        else if (pairs != default && pairs.Count == 4) 
+        else if (pairs != default && pairs.Count == 4)
         {
             base_score.poker_hand = "Two Pair";
             base_score.score_value = 20;
@@ -228,7 +222,7 @@ private System.Collections.IEnumerator CalculateScoreRoutine(List<GameObject> pl
         }
     }
 
-    public static List<GameObject> check_for_pairs(List<GameObject> played_cards_orig) 
+    public static List<GameObject> check_for_pairs(List<GameObject> played_cards_orig)
     {
         List<GameObject> played_cards_copy = played_cards_orig.ToList();
         List<GameObject> scored_cards = new List<GameObject>();

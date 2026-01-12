@@ -1,34 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayHandButton : MonoBehaviour
 {
     public GameObject selectionManager;
     private List<GameObject> selectedCards;
     public GameObject playedHand;
+    public GameObject hand;
     public ScoreManager scoreManager;
     public SpawnManager spawnManager;
 
     [Header("Visual Layout")]
     public float cardSpacing = 1.0f;
     public float arcIntensity = 5.0f;
-    public float moveSpeed = 2.0f;
+    public float moveSpeed = 10.0f;
 
     public void PlayHand(float duration = 1f)
     {
         selectedCards = selectionManager.GetComponent<SelectionManager>().selectedCards;
         if (selectedCards.Count == 0 || selectedCards == null)
             return;
-            
+
+        EnableOrDisableCardSelection(hand, false);
+
         int amount = selectedCards.Count;
-        
+
         StartCoroutine(MoveToPlayedHandRoutine(selectedCards, amount, playedHand.transform));
-        
-        scoreManager.calculate_score(selectedCards, () => 
-        {
-            StartCoroutine(EndHandSequence(selectedCards));
-        });
     }
     IEnumerator EndHandSequence(List<GameObject> cardsToDestroy)
     {
@@ -37,15 +36,20 @@ public class PlayHandButton : MonoBehaviour
         {
             Destroy(card);
         }
-        
+
         selectedCards.Clear();
 
-        yield return null; 
+        yield return null;
 
         if (spawnManager != null)
         {
             spawnManager.RefillHand();
         }
+
+        yield return new WaitForSeconds(1);
+
+        EnableOrDisableCardSelection(hand, true);
+        scoreManager.ResetText();
     }
 
     IEnumerator MoveToPlayedHandRoutine(List<GameObject> selectedCards, int amount, Transform playedHand)
@@ -65,19 +69,21 @@ public class PlayHandButton : MonoBehaviour
 
             Vector3 targetPos = new Vector3(xPos, 0, 0);
             Quaternion targetRot = Quaternion.identity;
-
-            StartCoroutine(AnimateCardToPlayedHand(card, targetPos, targetRot, startPos, startRot));
-
-            yield return new WaitForSeconds(0.1f);
+            yield return AnimateCardToPlayedHand(card, targetPos, targetRot, startPos, startRot);
         }
+
+        scoreManager.calculate_score(selectedCards, () =>
+        {
+            StartCoroutine(EndHandSequence(selectedCards));
+        });
     }
 
     IEnumerator AnimateCardToPlayedHand(GameObject card, Vector3 targetPos, Quaternion targetRot, Vector3 startPos, Quaternion startRot)
     {
         float t = 0f;
 
-        while (t < 1f) 
-        { 
+        while (t < 1f)
+        {
             t += Time.deltaTime * moveSpeed;
             float smoothT = 1f - Mathf.Pow(1f - t, 3);
 
@@ -85,6 +91,15 @@ public class PlayHandButton : MonoBehaviour
             card.transform.localRotation = Quaternion.Lerp(startRot, targetRot, smoothT);
 
             yield return null;
+        }
+    }
+
+    void EnableOrDisableCardSelection(GameObject cardContainer, bool targetBool) 
+    {
+        foreach (Transform cardTransform in cardContainer.transform)
+        {
+            Selectable cardSelectable = cardTransform.gameObject.GetComponent<Selectable>();
+            cardSelectable.enabled = targetBool;
         }
     }
 }
