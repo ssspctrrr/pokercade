@@ -2,6 +2,7 @@ using UnityEngine;
 
 public enum Suit
 {
+    None,
     Clubs,
     Diamond,
     Heart,
@@ -10,6 +11,7 @@ public enum Suit
 
 public enum Rank
 {
+    None = 0,
     Ace = 1,
     Two = 2,
     Three = 3,
