@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::JokerData
   name: DiamondJoker
   description: +3 Mult if Diamond is scored
-  sprite: {fileID: -647201446586270368, guid: 898f296f31674cd499b38693daf99105, type: 3}
+  sprite: {fileID: 1275369732506557731, guid: b202acc4682ea86449d5c969b06baca0, type: 3}
   rarity: 0
   eventTrigger: 1
   jokerCondition: {fileID: 11400000, guid: b03b8d8426aa5ba46aea96a83db30cc9, type: 2}

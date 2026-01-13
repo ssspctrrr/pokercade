@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::JokerData
   name: Spades Joker
   description: +3 Mult when Spades is scored
-  sprite: {fileID: 2300849376654760816, guid: 2bfb7c1e862a1d14eba3a74936ea142d, type: 3}
+  sprite: {fileID: -4746401226095182263, guid: d6c0d7fdacd3bdf4db0fbd560feacd36, type: 3}
   rarity: 0
   eventTrigger: 1
   jokerCondition: {fileID: 11400000, guid: 97191a3d25fc52c4fa6f06b71ecefa6b, type: 2}

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::JokerData
   name: HeartPlayed
   description: +3 Mult if Heart is scored
-  sprite: {fileID: 6363802610894339504, guid: 4f306033ed0937241b0066afafd547e6, type: 3}
+  sprite: {fileID: 6697507626446713582, guid: 8ac91c1f44a6b3a47b9029d23cba5080, type: 3}
   rarity: 0
   eventTrigger: 1
   jokerCondition: {fileID: 11400000, guid: ede2fec6127a0774bb4e3cc793abfb94, type: 2}
