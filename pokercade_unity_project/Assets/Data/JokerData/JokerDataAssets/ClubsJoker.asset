@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d41334d3d17be7419034cb234b42ef5, type: 3}
+  m_Name: ClubsJoker
+  m_EditorClassIdentifier: Assembly-CSharp::JokerData
+  name: ClubsJoker
+  description: +3 Mult if Clubs is scored
+  sprite: {fileID: -3017468023945734260, guid: 5c9d7baf77314ae469a98e8ec36bb4e8, type: 3}
+  rarity: 0
+  eventTrigger: 1
+  jokerCondition: {fileID: 11400000, guid: c35a30385d2f21143965a556916f86a7, type: 2}
+  jokerEffect: {fileID: 11400000, guid: b108607e1d1b85e4eb717a398a4f5126, type: 2}

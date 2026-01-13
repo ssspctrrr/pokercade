@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 4S
   m_EditorClassIdentifier: Assembly-CSharp::card_data
   id: 4C
-  suit: 3
+  suit: 4
   rank: 4
   value: 4
   sprite: {fileID: -227137705692812149, guid: 2e0fe96d929d3b74fa2f89fb8ee90a2e, type: 3}

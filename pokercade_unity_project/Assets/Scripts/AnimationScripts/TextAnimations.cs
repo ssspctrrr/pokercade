@@ -5,7 +5,7 @@ using System.Collections;
 
 public class TextAnimations : MonoBehaviour
 {
-    public void transitionTextViaShake(TextMeshProUGUI textToShake, string newText)
+    public void TransitionTextViaShake(TextMeshProUGUI textToShake, string newText)
     {
         StartCoroutine(TextShaker(textToShake, newText));
     }
