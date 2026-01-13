@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: JS
   m_EditorClassIdentifier: Assembly-CSharp::card_data
   id: JS
-  suit: 3
+  suit: 4
   rank: 11
   value: 10
   sprite: {fileID: -1963845882603784272, guid: 0ae36716d90ea934081b5e9392ff5c47, type: 3}

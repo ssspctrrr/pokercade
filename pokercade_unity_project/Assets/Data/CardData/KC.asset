@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: KC
   m_EditorClassIdentifier: Assembly-CSharp::card_data
   id: KC
-  suit: 0
+  suit: 1
   rank: 13
   value: 10
   sprite: {fileID: 5078020014594654884, guid: 026183736d36d7d44a6698c092e5887b, type: 3}

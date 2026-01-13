@@ -13,12 +13,12 @@ public class ScoreManager : MonoBehaviour
     int score = 0;
     public int scoredAnimationOffset = 3;
     public TextAnimations textAnimation;
+    public GameObject jokerManager;
 
     public void calculate_score(List<GameObject> played_cards, System.Action onComplete = null)
     {
         StartCoroutine(CalculateScoreRoutine(played_cards, onComplete));
     }
-
     private IEnumerator CalculateScoreRoutine(List<GameObject> played_cards, System.Action onComplete)
     {
 
@@ -28,9 +28,9 @@ public class ScoreManager : MonoBehaviour
         if (base_score == default) { base_score = check_full_house_3_of_a_kind_pairs(played_cards); }
         if (base_score == default) { base_score = get_high_card(played_cards); }
 
-        textAnimation.transitionTextViaShake(pokerHandText, base_score.poker_hand);
-        textAnimation.transitionTextViaShake(scoreMultText, base_score.score_mult.ToString());
-        textAnimation.transitionTextViaShake(scoreValueText, base_score.score_value.ToString());
+        textAnimation.TransitionTextViaShake(pokerHandText, base_score.poker_hand);
+        textAnimation.TransitionTextViaShake(scoreMultText, base_score.score_mult.ToString());
+        textAnimation.TransitionTextViaShake(scoreValueText, base_score.score_value.ToString());
 
         yield return StartCoroutine(AnimateScoreCard(base_score));
 
@@ -50,21 +50,42 @@ public class ScoreManager : MonoBehaviour
             baseScore.score_value += card.GetComponent<CardInstance>().GetValue();
             yield return StartCoroutine(textAnimation.TextShaker(scoreValueText, baseScore.score_value.ToString()));
 
+            BaseScoreData baseScoreCopy = baseScore;
+
+            // build joker context
+            JokerContext context = new JokerContext();
+            context.baseScore = baseScore;
+            context.hand = 0;
+            context.card = card;
+            context.scoreMultText = scoreMultText;
+            context.textAnimations = textAnimation;
+
+            //Debug.Log(context.card == null ? "context.card is null" : "context.card exists");
+            //Debug.Log(context.card.GetComponent<CardInstance>().data.id);
+
+            //Debug.Log(jokerManager == null ? "jokerManager is null" : "jokerManager exists");
+            //Debug.Log(jokerManager.GetComponent<JokerManager>() == null ? "JokerManager component missing" : "JokerManager component exists");
+            //Debug.Log(context == null ? "context is null" : "context exists");
+
+            jokerManager.GetComponent<JokerManager>().TriggerJokers(JokerTrigger.onScoreCard, context, baseScore);
             card.transform.localPosition = startPos;
         }
 
         score += baseScore.score_value * baseScore.score_mult;
-        textAnimation.transitionTextViaShake(scoreText, score.ToString());
+        textAnimation.TransitionTextViaShake(scoreText, score.ToString());
     }
 
     public void ResetText()
     {
-        textAnimation.transitionTextViaShake(pokerHandText, "???PokerHand???");
-        textAnimation.transitionTextViaShake(scoreMultText, "??Mult??");
-        textAnimation.transitionTextViaShake(scoreValueText, "??Value??");
+        textAnimation.TransitionTextViaShake(pokerHandText, "???PokerHand???");
+        textAnimation.TransitionTextViaShake(scoreMultText, "??Mult??");
+        textAnimation.TransitionTextViaShake(scoreValueText, "??Value??");
     }
     public static BaseScoreData check_straight_and_or_flush(List<GameObject> played_cards)
     {
+        if (played_cards.Count != 5)
+            return default;
+
         BaseScoreData base_score = new BaseScoreData();
         List<GameObject> straight = check_straight(played_cards);
         List<GameObject> flush = check_flush(played_cards);

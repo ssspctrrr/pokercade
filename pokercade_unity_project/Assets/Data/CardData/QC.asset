@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: QC
   m_EditorClassIdentifier: Assembly-CSharp::card_data
   id: QC
-  suit: 0
+  suit: 1
   rank: 12
   value: 10
   sprite: {fileID: -5590334030559059320, guid: d9d76f530d8c3df4faeaf69d2f446718, type: 3}

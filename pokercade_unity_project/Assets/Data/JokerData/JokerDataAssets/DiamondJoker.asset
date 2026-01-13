@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d41334d3d17be7419034cb234b42ef5, type: 3}
+  m_Name: DiamondJoker
+  m_EditorClassIdentifier: Assembly-CSharp::JokerData
+  name: DiamondJoker
+  description: +3 Mult if Diamond is scored
+  sprite: {fileID: -647201446586270368, guid: 898f296f31674cd499b38693daf99105, type: 3}
+  rarity: 0
+  eventTrigger: 1
+  jokerCondition: {fileID: 11400000, guid: b03b8d8426aa5ba46aea96a83db30cc9, type: 2}
+  jokerEffect: {fileID: 11400000, guid: b108607e1d1b85e4eb717a398a4f5126, type: 2}
