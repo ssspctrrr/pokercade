@@ -257,6 +257,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: DiamondJoker
       objectReference: {fileID: 0}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_Size.x
+      value: 1.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_Size.y
+      value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1275369732506557731, guid: b202acc4682ea86449d5c969b06baca0, type: 3}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -305,7 +321,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -186, y: 381}
+  m_AnchoredPosition: {x: -224, y: 526}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &278962847
@@ -1823,7 +1839,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -8246103488371625927, guid: 12866e74633fd724dbf51bb96ca87863, type: 3}
+  m_Sprite: {fileID: -3345638401249363420, guid: 5a9c4a0935179394693c62c28a5df21f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1842,8 +1858,8 @@ Transform:
   m_GameObject: {fileID: 668731212}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1733.2561, y: 572.5661, z: 0}
-  m_LocalScale: {x: 64.628006, y: 63.612473, z: 54.685}
+  m_LocalPosition: {x: 1725.9774, y: 573.2638, z: 0}
+  m_LocalScale: {x: 129.2068, y: 123.68693, z: 54.685}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2042,9 +2058,29 @@ PrefabInstance:
       propertyPath: jokerData
       value: 
       objectReference: {fileID: 11400000, guid: 0360da1ec6676a84990d8aee61b2eca2, type: 2}
+    - target: {fileID: 871604306351132316, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 1676139329}
     - target: {fileID: 2149173699646754334, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
       propertyPath: m_Name
       value: ClubsJoker
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_Size.x
+      value: 1.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_Size.y
+      value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -4135243866007977431, guid: 94a9489bc9b2834478f87205cfea7485, type: 3}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2094,7 +2130,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 198, y: 381}
+  m_AnchoredPosition: {x: 228.20012, y: 526}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &815084169
@@ -2334,6 +2370,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpadeJoker
       objectReference: {fileID: 0}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_Size.x
+      value: 1.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_Size.y
+      value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -4746401226095182263, guid: d6c0d7fdacd3bdf4db0fbd560feacd36, type: 3}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2443,10 +2495,10 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.48, y: 2.4}
+    newSize: {x: 1.48, y: 2.4}
+    adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
@@ -2983,6 +3035,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: HeartJoker
       objectReference: {fileID: 0}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_Size.x
+      value: 1.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_Size.y
+      value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 6697507626446713582, guid: 8ac91c1f44a6b3a47b9029d23cba5080, type: 3}
+    - target: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3054,7 +3122,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -7443756053782179069, guid: 98ede3a5a2e230046ac11176247218c5, type: 3}
+  m_Sprite: {fileID: -2259133536089948363, guid: 2a6a2c571080f9f4aa87de48d8db6946, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3106,7 +3174,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2, y: 381}
+  m_AnchoredPosition: {x: -24, y: 526}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1362255634
@@ -3687,10 +3755,10 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.48, y: 2.4}
+    newSize: {x: 1.48, y: 2.4}
+    adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
@@ -3791,15 +3859,20 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.48, y: 2.4}
+    newSize: {x: 1.48, y: 2.4}
+    adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 0.0001, y: 0.0001}
   m_EdgeRadius: 0
+--- !u!212 &1676139329 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 5265264421132106408, guid: b1bae0d511325e0448b8d6cf27370dad, type: 3}
+  m_PrefabInstance: {fileID: 800887048}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1754111816
 GameObject:
   m_ObjectHideFlags: 0
@@ -4523,10 +4596,10 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.48, y: 2.4}
+    newSize: {x: 1.48, y: 2.4}
+    adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
@@ -4566,7 +4639,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -663, y: 187}
+  m_AnchoredPosition: {x: -637, y: 189}
   m_SizeDelta: {x: 551, y: 187}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2069744738
