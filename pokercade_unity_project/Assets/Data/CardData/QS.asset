@@ -16,4 +16,4 @@ MonoBehaviour:
   suit: 4
   rank: 12
   value: 10
-  sprite: {fileID: 2577071026703369768, guid: 0627c7ae73556264babfaddf27d66472, type: 3}
+  sprite: {fileID: -1457877265426806222, guid: e7a2e1d7eb69cae45a0187a942ac5333, type: 3}
